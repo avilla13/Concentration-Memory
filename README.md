@@ -1,6 +1,6 @@
 # Concentration/Memory Game
 ​
-![[Screenshot 2023-06-15 at 4.47.50 PM.png]]
+![Project Proposal Image](./screenshot1.png)
 ​
 ##  Initial State:
     - Set a class (or id) of cards or any set of matching pairs 

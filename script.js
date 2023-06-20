@@ -19,7 +19,12 @@ const cardTypes = [
 /*----game STATE variables----*/
 let isFirstClick = true; // Variable to track the first click
 let gameboard; // Variable to track state of cards
-let playerChoice; // Variable to track player choice
+let playerStats = [ // Variable to track player choices and stats
+    {choice1: 'null', choice2: 'null'},
+    {clicks: 0, pairs: 0}
+]; 
+    
+
 
 /*----CACHED elements----*/
 
@@ -28,17 +33,10 @@ const cardEls = document.querySelectorAll('.card'); // Get all the elements with
 
 /*----EVENT listeners----*/
 
-// // Add a click event listener to each card element
-cardEls.forEach(cardEl => {
+// Add a click event listener to each card element
+cardEls.forEach((cardEl) => {
   cardEl.addEventListener('click', handleClick);
 });
-// Add click event listener to each card
-cardEls.forEach(cardEl => {
-    cardEl.addEventListener('click', () => {
-      cardEl.classList.toggle('card-visible');
-      cardEl.classList.toggle('card-hidden');
-    });
-  });
 
 
 /*----FUNCTIONS----*/
@@ -48,12 +46,12 @@ init();
 
 function init() {
   scores = {
-   
+   playerOne: 0
   };
-  results = {
+//   results = {
     
-  };
-  outcomes ;
+//   };
+//   outcomes ;
   
   render();
 }
@@ -61,23 +59,23 @@ function init() {
 // render() should transfer/visualize all state
 function render() {
     renderBoard();
-    handleClick();
+    // handleClick();
     renderScores();
     renderResults();
 }
 
 // Assign the 'images' from the cardTypes to each card element
 function renderBoard() {
-    const cardVisibleEls = document.querySelectorAll('.card-visible');
-    const cardHiddenEls = document.querySelectorAll('.card-hidden');
+    // const cardVisibleEls = document.querySelectorAll('.card-visible');
+    // const cardHiddenEls = document.querySelectorAll('.card-hidden');
   
-    cardVisibleEls.forEach((cardVisibleEl, index) => {
-      cardVisibleEl.style.backgroundColor = cardTypes[index].img;
-    });
+    // cardVisibleEls.forEach((cardVisibleEl, index) => {
+    //   cardVisibleEl.style.backgroundColor = cardTypes[index].img;
+    // });
   
-    cardHiddenEls.forEach((cardHiddenEl, index) => {
-      cardHiddenEl.style.backgroundColor = cardTypes[index].img;
-    });
+    // cardHiddenEls.forEach((cardHiddenEl, index) => {
+    //   cardHiddenEl.style.backgroundColor = cardTypes[index].img;
+    // });
   }
   
 
@@ -90,21 +88,30 @@ function handleClick() {
     // Set isFirstClick to false, so it won't execute this block on subsequent clicks
     isFirstClick = false;
   }
-  const cardVisible = this.querySelector('.card-visible');
-  const cardHidden = this.querySelector('.card-hidden');
+  this.classList.toggle('card-visible');
+  this.classList.toggle('card-hidden');
 
-  if (cardVisible.style.display === 'none') {
-    cardVisible.style.display = 'block';
-    cardHidden.style.display = 'none';
-  } else {
-    cardVisible.style.display = 'none';
-    cardHidden.style.display = 'block';
-  }
+//   const cardVisible = this.querySelector('.card-visible');
+//   const cardHidden = this.querySelector('.card-hidden');
+
+//   if (cardVisible.style.display === 'none') {
+//     cardVisible.style.display = 'block';
+//     cardHidden.style.display = 'none';
+//   } else {
+//     cardVisible.style.display = 'none';
+//     cardHidden.style.display = 'block';
+//   }
 }
   
-  // Toggle the 'card-visible' class on the child element with class 'card-visible'
-  //this.querySelector('.card-visible').classList.toggle('card-visible');
+
 
 function renderTimer() {
   return console.log(`First card has been selected, the timer has begun!`);
+}
+
+function renderScores() {
+
+}
+function renderResults() {
+
 }

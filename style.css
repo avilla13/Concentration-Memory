@@ -1,0 +1,116 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+}
+header {
+  background-color: #333;
+  color: lightgreen;
+  padding: 10px 0;
+  font-family: 'Nanum Gothic Coding', monospace;
+}
+h1 {
+  margin-top: 20px;
+}
+#rules {
+  margin-top: 20px;
+  text-align: center;
+  color: lightcyan;
+  font-family: 'Marmelad', sans-serif;
+}
+
+#timer {
+
+  text-align: center;
+  color: red;
+  margin: 20px auto;
+  font-family: 'Fira Mono', monospace;
+  letter-spacing: 2px;
+}
+
+#score {
+  margin-top: 10px;
+}
+
+#gameboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 10px;
+  column-gap: 10px;
+  row-gap: 10px;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+  max-width: 300px;
+  height: 300px;
+  margin: 20px auto;
+  border: 1px solid black ;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  background-color: #2a3f27;
+  cursor: pointer;
+  border: 2px solid #50e866;
+  border-radius: 8%;
+  
+}
+
+.card-hidden, .card-visible {
+  /* width: 100%;
+  height: 100%;
+  border: 2px solid transparent;
+  border-radius: 8%; */
+  
+}
+
+.card-hidden {
+  /* position: relative; */
+  background-color: rgb(88, 190, 75);
+
+}
+.card-visible {
+
+  background-color: rgb(10, 97, 129);
+}
+
+#right, #left {
+  top:0;
+  bottom: 0;
+  width: 10px;
+  position: fixed;
+}
+#right {
+  right: 0;
+}
+#left {
+  left: 0;
+}
+#bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+}
+button {
+  margin-top: 20px;
+  padding: 15px 20px;
+  font-size: 16px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}

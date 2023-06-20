@@ -21,8 +21,10 @@ let isFirstClick = true; // Variable to track the first click
 let gameboard; // Variable to track state of cards
 let playerStats = [ // Variable to track player choices and stats
     {choice1: 'null', choice2: 'null'},
-    {clicks: 0, pairs: 0}
+    {clicks: 0, pairs: 0},
+    {currCard: 'null'}
 ]; 
+let timer;
     
 
 
@@ -33,7 +35,7 @@ const cardEls = document.querySelectorAll('.card'); // Get all the elements with
 
 /*----EVENT listeners----*/
 
-// Add a click event listener to each card element
+// Add a click event listener to each card element -> triggers the handleClick()
 cardEls.forEach((cardEl) => {
   cardEl.addEventListener('click', handleClick);
 });
@@ -48,39 +50,32 @@ function init() {
   scores = {
    playerOne: 0
   };
-//   results = {
-    
-//   };
+//   results = {};
 //   outcomes ;
-  
   render();
 }
 
 // render() should transfer/visualize all state
 function render() {
     renderBoard();
-    // handleClick();
     renderScores();
     renderResults();
 }
-
-// Assign the 'images' from the cardTypes to each card element
+// render board-> initiate board (only once), render state of cards
 function renderBoard() {
-    // const cardVisibleEls = document.querySelectorAll('.card-visible');
-    // const cardHiddenEls = document.querySelectorAll('.card-hidden');
-  
-    // cardVisibleEls.forEach((cardVisibleEl, index) => {
-    //   cardVisibleEl.style.backgroundColor = cardTypes[index].img;
-    // });
-  
-    // cardHiddenEls.forEach((cardHiddenEl, index) => {
-    //   cardHiddenEl.style.backgroundColor = cardTypes[index].img;
-    // });
+    //assign all cards with 'card-visible' class to 'cardVisibleEls'
+    const cardVisibleEls = document.querySelectorAll('.card-visible'); 
+    // Assign the 'images' from the cardTypes to each card element
+        cardVisibleEls.forEach((cardVisibleEl, index) => {
+        cardVisibleEl.style.backgroundColor = cardTypes[index].img;
+        // cardVisibleEl.style.visibility = 'hidden';
+    });
+
   }
   
 
 
-function handleClick() {
+function handleClick(evt) {
   // Check if it's the first click
   if (isFirstClick) {
     // Start timer function
@@ -88,19 +83,22 @@ function handleClick() {
     // Set isFirstClick to false, so it won't execute this block on subsequent clicks
     isFirstClick = false;
   }
-  this.classList.toggle('card-visible');
-  this.classList.toggle('card-hidden');
 
-//   const cardVisible = this.querySelector('.card-visible');
-//   const cardHidden = this.querySelector('.card-hidden');
+  const cardVisible = this.querySelector('.card-visible'); // access 'card-visible' class
+  const cardHidden = this.querySelector('.card-hidden'); // access 'card-hidden' class
 
-//   if (cardVisible.style.display === 'none') {
-//     cardVisible.style.display = 'block';
-//     cardHidden.style.display = 'none';
-//   } else {
-//     cardVisible.style.display = 'none';
-//     cardHidden.style.display = 'block';
-//   }
+  this.classList.toggle('card-visible'); // toggles the clicked card to class 'card-visible'
+  this.classList.toggle('card-hidden'); // toggles the clicked card to class 'card-hidden'
+  
+
+  if (cardVisible.style.display === 'none') {
+    cardVisible.style.visibility === 'visible';
+    cardVisible.style.display = 'block';
+    cardHidden.style.display = 'none';
+  } else {
+    cardVisible.style.display = 'none';
+    cardHidden.style.display = 'block';
+  }
 }
   
 

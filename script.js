@@ -72,7 +72,9 @@ function renderBoard() {
 
 
 function handleClick(evt) {
-  // Check if it's the first click
+  // guards for only clicking on card
+if(evt.target === cardEls) {
+    // Check if it's the first click
   if (isFirstClick) {
     // Start timer function
     renderTimer();
@@ -95,15 +97,9 @@ function handleClick(evt) {
     // playerStats.choice1 = null; // Reset player choices
     // playerStats.choice2 = null; // Reset player choices
   } 
-  
-
-//   for(let i =0; i < 1; i++){
-//     cardChoices[i] = cardChoice};
 
     console.log(playerStats);
-
-
-
+    }
 }
   
 function matchPairs (card1, card2) { // check if selected cards are a match
@@ -111,10 +107,13 @@ function matchPairs (card1, card2) { // check if selected cards are a match
     if (card1 === card2) { // if they are, add 1 to scores
         scores.playerOne++;
         console.log(`scores: ${scores.playerOne}`);
+        // card1 and card2 -> stay as card-visible class
+        // Add audio for matching pair
+        return card1, card2 = null;
     } else{ // if they are not, then clear playerStats.choices
         console.log(`card one ${card1} does not pair with card two ${card2}`);
-        // card1 = null;
-        // card2 = null; 
+        // Add audio for no-match
+        return card1, card2 = null;
     }
 }
 

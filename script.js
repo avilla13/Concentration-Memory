@@ -14,11 +14,11 @@ const cardTypes = [
 /*----game STATE variables----*/
 let isFirstClick = true; // Variable to track the first click
  // Variable to track state of cards
-let playerStats = [ // Variable to track player choices and stats
-    {choices: []},
-    {clicks: 0, pairs: 0},
-    {currCard: 'null'}
-]; 
+let playerStats = { // Variable to track player choices and stats
+    choice1: null,
+    choice2: null,
+    clicks: 0
+}; 
 let cardChoices = []; // Empty array to hold player choices
 let timer;
 
@@ -79,36 +79,42 @@ function handleClick(evt) {
     // Set isFirstClick to false, so it won't execute this block on subsequent clicks
     isFirstClick = false;
   }
-  // Store first card and second card in the 'cardChoices' array, respectively
+  // Store first card and second card in the 'playerStats.choice1 & 2' (respectively) and track clicks
   const cardChoice = evt.target.style.backgroundColor;
-  for(let i =0; i < 2; i++){
-    cardChoices[i] = cardChoices.push(cardChoice)};
 
-    console.log(cardChoices);
+  if (playerStats.clicks === 0) {
+    playerStats.choice1 = cardChoice;
+    playerStats.clicks++;
+  } else if (playerStats.clicks === 1) {
+    playerStats.choice2 = cardChoice;
+    playerStats.clicks++;
+    //check for pairs
+    matchPairs(playerStats.choice1, playerStats.choice2);
 
-
-//   const cardVisible = document.querySelector('.card-visible'); // access 'card-visible' class
-//   const cardHidden = document.querySelector('.card-hidden'); // access 'card-hidden' class
-
-//   cardVisible.classList.toggle('card-visible'); // toggles the clicked card to class 'card-visible'
-//   this.classList.toggle('card-hidden'); // toggles the clicked card to class 'card-hidden'
+    playerStats.clicks = 0; // Reset the clicks
+    // playerStats.choice1 = null; // Reset player choices
+    // playerStats.choice2 = null; // Reset player choices
+  } 
   
 
-//   if (cardVisible.style.display === 'none') {
-    
-//     cardVisible.style.display = 'block';
-//     cardHidden.style.display = 'none';
-//   } else {
-//     cardVisible.style.display = 'none';
-//     cardHidden.style.display = 'block';
-//   }
+//   for(let i =0; i < 1; i++){
+//     cardChoices[i] = cardChoice};
+
+    console.log(playerStats);
+
+
+
 }
   
 function matchPairs (card1, card2) { // check if selected cards are a match
+
     if (card1 === card2) { // if they are, add 1 to scores
-        scores++;
-    } else{
-        return; // if they are not, then clear playerStats.choices
+        scores.playerOne++;
+        console.log(`scores: ${scores.playerOne}`);
+    } else{ // if they are not, then clear playerStats.choices
+        console.log(`card one ${card1} does not pair with card two ${card2}`);
+        // card1 = null;
+        // card2 = null; 
     }
 }
 

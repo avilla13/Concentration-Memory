@@ -65,6 +65,7 @@ h1 {
   cursor: pointer;
   border: 2px solid #50e866;
   border-radius: 8%;
+  transition: background-color 1s;
   
 }
 

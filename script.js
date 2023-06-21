@@ -58,22 +58,23 @@ function render() {
     renderScores();
     renderResults();
 }
-// render board-> initiate board (only once), render state of cards
+// render board-> initiate board shuffled grid (only once), 
+// then render state of cards whenever invoked
 function renderBoard() {
-    //assign all cards with 'card-visible' class to 'cardVisibleEls'
-    const cardVisibleEls = document.querySelectorAll('.card-visible'); 
-    // Assign the 'images' from the cardTypes to each card element
-        cardVisibleEls.forEach((cardVisibleEl, index) => {
-        cardVisibleEl.style.backgroundColor = cardTypes[index].img;
-    });
-
-  }
-  
+    // Assign the 'images' from the cardTypes to each card element w/ 'card-visible' class
+    cardEls.forEach((cardEl, index) => {
+        if(cardEl.classList.contains('card-visible')) {
+            cardEl.style.backgroundColor = cardTypes[index].img;
+        } else {
+            cardEl.style.backgroundColor = 'black'; // the 'images' will be toggled on in handleClick
+        }
+    })
+}
 
 
 function handleClick(evt) {
   // guards for only clicking on card
-if(evt.target === cardEls) {
+if (evt.target.classList.contains('card')){
     // Check if it's the first click
   if (isFirstClick) {
     // Start timer function
@@ -81,8 +82,12 @@ if(evt.target === cardEls) {
     // Set isFirstClick to false, so it won't execute this block on subsequent clicks
     isFirstClick = false;
   }
+  evt.target.classList.toggle('card-visible'); // toggles the clicked card to class 'card-visible'
+  
   // Store first card and second card in the 'playerStats.choice1 & 2' (respectively) and track clicks
-  const cardChoice = evt.target.style.backgroundColor;
+  const currentId = evt.target.id;
+  const cardChoice = cardTypes[parseInt(currentId)].img; 
+    console.log(cardChoice);
 
   if (playerStats.clicks === 0) {
     playerStats.choice1 = cardChoice;
@@ -99,9 +104,14 @@ if(evt.target === cardEls) {
   } 
 
     console.log(playerStats);
+    render();
     }
 }
-  
+
+function flipCard() {
+
+}
+
 function matchPairs (card1, card2) { // check if selected cards are a match
 
     if (card1 === card2) { // if they are, add 1 to scores
@@ -110,7 +120,7 @@ function matchPairs (card1, card2) { // check if selected cards are a match
         // card1 and card2 -> stay as card-visible class
         // Add audio for matching pair
         return card1, card2 = null;
-    } else{ // if they are not, then clear playerStats.choices
+    } else { // if they are not, then clear playerStats.choices
         console.log(`card one ${card1} does not pair with card two ${card2}`);
         // Add audio for no-match
         return card1, card2 = null;
@@ -122,7 +132,9 @@ function renderTimer() {
 }
 
 function renderScores() {
-
+    
+    const scoreEl = document.getElementById('score');
+    scoreEl.innerText = `Score: ${scores.playerOne}`;
 }
 function renderResults() {
 

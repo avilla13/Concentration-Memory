@@ -111,27 +111,31 @@ function flipCard(card) {
 
   
 function matchPairs (card1, card2) { // checks if selected cards are a match
+    // Find the indices of card1 and card2 in the cardTypes array
+     const card1Index = cardTypes.findIndex(card => card.img === card1);
+     const card2Index = cardTypes.findIndex(card => card.img === card2 && card.id !== card1Index);
+    
     if (card1 === card2) { 
         scores.playerOne++; // if they are, add 1 to scores
         console.log(`scores: ${scores.playerOne}`);
+        console.log(card1Index, card2Index);
         
-       // Find the indices of card1 and card2 in the cardTypes array
-        const card1Index = cardTypes.findIndex(card => card.img === card1);
-        const card2Index = cardTypes.findIndex(card => card.img === card2 && card.id !== card1Index);
-    console.log(card1Index, card2Index);
     // Update the 'match' value to 1 for both cards so they become 'unselectable'
         if (card1Index !== -1 && card2Index !== -1) {
         cardTypes[card1Index].match = 1;
         cardTypes[card2Index].match = 1;
         }
-    // if their match value is 0, flip the cards back
-        if (cardTypes[card1Index].match === 0) {
-            flipCard(document.getElementById(`${card1Index}`)); //why is this not flipping card back???
-          }
-    
-    // Add audio for matching pair
-       
-    } else { // if they are not a match, then clear playerStats.choices
+        
+        // Add audio for matching pair
+        
+    } else if (card1 !== card2) { // if they are not a match, then clear playerStats.choices
+        // if their match value is 0, flip the cards back
+            if (cardTypes[card1Index].match === 0) {
+                flipCard(document.getElementById(`${card1Index}`)); //why is this not flipping card back???
+              }
+            if (cardTypes[card2Index].match === 0) {
+                flipCard(document.getElementById(`${card2Index}`)); //why is this not flipping card back???
+              }
         
         console.log(`card one ${card1} does not pair with card two ${card2}`);
        

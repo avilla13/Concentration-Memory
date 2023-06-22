@@ -1,13 +1,12 @@
 
 /*----CONSTANTS----*/
-
 const cardDeck = [
-    {id: 0, img: 'blue', match: 0}, // match: 0 -> card not matched
-    {id: 1, img: 'blue', match: 0}, // match: 1 -> card has been matched
-    {id: 2, img: 'red', match: 0},
-    {id: 3, img: 'red', match: 0},
-    {id: 4, img: 'yellow', match: 0},
-    {id: 5, img: 'yellow', match: 0},
+    {img: 'blue', match: 0}, // match: 0 -> card not matched
+    {img: 'blue', match: 0}, // match: 1 -> card has been matched
+    {img: 'red', match: 0},
+    {img: 'red', match: 0},
+    {img: 'yellow', match: 0},
+    {img: 'yellow', match: 0},
 ];
 
 /*----game STATE variables----*/
@@ -24,13 +23,13 @@ let timer;
 
 const cardEls = document.querySelectorAll('.card'); // Get all the elements with the class 'card'
 const gameboard = document.getElementById('gameboard'); // Get all the elements in gameboard
-
+const playAgainBtn = document.querySelector('button');
 
 /*----EVENT listeners----*/
 
 // Add a click event listener to each gameboard element -> triggers the handleClick()
 gameboard.addEventListener('click', handleClick);
-
+playAgainBtn.addEventListener('click', init);
 
 /*----FUNCTIONS----*/
 
@@ -38,11 +37,14 @@ gameboard.addEventListener('click', handleClick);
 init();
 function init() {
   shuffle (cardDeck);
-  scores = {
-   playerOne: 0
-  };
-//   results = {};
-//   outcomes ;
+  scores = {playerOne: 0};
+  playerStats.choice1 = null;
+  playerStats.choice2 = null;
+  playerStats.clicks = 0;
+  isFirstClick = true;
+  cardDeck.forEach((card) => card.match = 0);
+  cardEls.forEach(cardEl => cardEl.classList.remove('card-visible'));
+// results = {};
   render();
 }
 
@@ -86,36 +88,36 @@ function renderBoard() {
 }
 
 function handleClick(evt) {
-  // Need correct card id to match clicked card's id
+  // Need to assign clicked card to variable (object)
     const cardObj = cardDeck[parseInt(evt.target.id)];
 
     // guards for only clicking on card elements
-if (evt.target.classList.contains('card') && 
+    if (evt.target.classList.contains('card') && 
     cardObj.match === 0) { //  & to not select matched cards
     // Check if it's the first click
-  if (isFirstClick) {
+        if (isFirstClick) {
     // Start timer function
-    renderTimer();
+        renderTimer();
     // Set isFirstClick to false, so it won't execute this block on subsequent clicks
-    isFirstClick = false;
-  }
-  
+        isFirstClick = false;
+        }
+  console.log(cardObj, typeof(cardObj));
   // Store first card and second card in the 'playerStats.choice1 & 2' (respectively) and track clicks
-//   const cardId = parseInt(evt.target.id); // target the selected card's id property
-//   const cardChoice = cardDeck[cardId]; //use that id to select cardTypes' object
 
   flipCard(evt.target);
 
     //Update player state variables
   if (playerStats.clicks === 0) {
-    playerStats.choice1 = cardObj;
+    playerStats.choice1 = cardObj; // add clicked card obj to choice1
+    playerStats.choice1El = evt.target; // add the HTML element
     playerStats.clicks++;
   } else if (playerStats.clicks === 1) {
     playerStats.choice2 = cardObj;
+    playerStats.choice2El = evt.target;
     console.log(playerStats);
     
     //check for pairs
-    matchPairs(playerStats.choice1, playerStats.choice2);
+    matchPairs(playerStats.choice1, playerStats.choice1El, playerStats.choice2, playerStats.choice2El);
 
     playerStats.clicks = 0; // Reset the clicks
     // playerStats.choice1 = null; // Reset player choices
@@ -132,7 +134,7 @@ function flipCard(card) {
 }
 
   
-function matchPairs (card1, card2) { // checks if selected cards are a match
+function matchPairs (card1, card1El, card2, card2El) { // checks if selected cards are a match
        
     if (card1.img === card2.img) { 
         scores.playerOne++; // if they are, add 1 to scores
@@ -146,8 +148,7 @@ function matchPairs (card1, card2) { // checks if selected cards are a match
         
     } else {
         // if their match value is 0, flip the cards back
-        const card1El = document.getElementById(card1.id.toString()); // 
-        const card2El = document.getElementById(card2.id.toString());
+        
         console.log('time out will begin');
         setTimeout(() => {
             flipCard(card1El);

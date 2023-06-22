@@ -1,8 +1,7 @@
 
 /*----CONSTANTS----*/
-const cardDeck = [];
 
-const cardTypes = [
+const cardDeck = [
     {id: 0, img: 'blue', match: 0}, // match: 0 -> card not matched
     {id: 1, img: 'blue', match: 0}, // match: 1 -> card has been matched
     {id: 2, img: 'red', match: 0},
@@ -38,6 +37,7 @@ gameboard.addEventListener('click', handleClick);
 // DON'T FORGET TO CALL init() to initialize all state, then call render()
 init();
 function init() {
+  shuffle (cardDeck);
   scores = {
    playerOne: 0
   };
@@ -52,13 +52,33 @@ function render() {
     renderScores();
     renderResults();
 }
+// Using the Fisher-Yates shuffle algorithm method:
+function shuffle(array) { 
+    let currentIndex = array.length;
+    let randomIndex;
+    // While there remain elements to shuffle.
+    while (currentIndex) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      const tempVal = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = tempVal;
+    //   [array[currentIndex], array[randomIndex]] = [
+    //     array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
 // render board-> initiate shuffled board grid (only once), 
 // then render state of cards whenever invoked
 function renderBoard() {
     // Assign the 'images' from the cardTypes to each card element w/ 'card-visible' class
     cardEls.forEach((cardEl, index) => {
         if(cardEl.classList.contains('card-visible')) {
-            cardEl.style.backgroundColor = cardTypes[index].img;
+            cardEl.style.backgroundColor = cardDeck[index].img;
         } else {
             cardEl.style.backgroundColor = 'black'; // the 'images' will be toggled on in handleClick
         }
@@ -66,9 +86,12 @@ function renderBoard() {
 }
 
 function handleClick(evt) {
-  // guards for only clicking on card elements
+  // Need correct card id to match clicked card's id
+    const cardObj = cardDeck[parseInt(evt.target.id)];
+
+    // guards for only clicking on card elements
 if (evt.target.classList.contains('card') && 
-    cardTypes[parseInt(evt.target.id)].match === 0) { //  & to not select matched cards
+    cardObj.match === 0) { //  & to not select matched cards
     // Check if it's the first click
   if (isFirstClick) {
     // Start timer function
@@ -78,19 +101,19 @@ if (evt.target.classList.contains('card') &&
   }
   
   // Store first card and second card in the 'playerStats.choice1 & 2' (respectively) and track clicks
-  const cardId = parseInt(evt.target.id); // target the selected card's id property
-  const cardChoice = cardTypes[cardId].img; //use that id to select cardTypes' image
+//   const cardId = parseInt(evt.target.id); // target the selected card's id property
+//   const cardChoice = cardDeck[cardId]; //use that id to select cardTypes' object
 
-  if (cardTypes[cardId].match === 0) { // check to see if card has been matched already
-      flipCard(evt.target);
-  }
+  flipCard(evt.target);
+
     //Update player state variables
   if (playerStats.clicks === 0) {
-    playerStats.choice1 = cardChoice;
+    playerStats.choice1 = cardObj;
     playerStats.clicks++;
   } else if (playerStats.clicks === 1) {
-    playerStats.choice2 = cardChoice;
-    playerStats.clicks++;
+    playerStats.choice2 = cardObj;
+    console.log(playerStats);
+    
     //check for pairs
     matchPairs(playerStats.choice1, playerStats.choice2);
 
@@ -100,10 +123,9 @@ if (evt.target.classList.contains('card') &&
     
   } 
 
-    console.log(playerStats);
     render(); // render the card(s) state
-    }
 }
+} // end click handler
 
 function flipCard(card) {
     card.classList.toggle('card-visible'); // toggles the clicked card's class to 'card-visible'
@@ -111,32 +133,30 @@ function flipCard(card) {
 
   
 function matchPairs (card1, card2) { // checks if selected cards are a match
-    // Find the indices of card1 and card2 in the cardTypes array
-     const card1Index = cardTypes.findIndex(card => card.img === card1);
-     const card2Index = cardTypes.findIndex(card => card.img === card2 && card.id !== card1Index);
-    
-    if (card1 === card2) { 
+       
+    if (card1.img === card2.img) { 
         scores.playerOne++; // if they are, add 1 to scores
-        console.log(`scores: ${scores.playerOne}`);
-        console.log(card1Index, card2Index);
+        console.log(`scores: ${scores.playerOne}`);  
         
     // Update the 'match' value to 1 for both cards so they become 'unselectable'
-        if (card1Index !== -1 && card2Index !== -1) {
-        cardTypes[card1Index].match = 1;
-        cardTypes[card2Index].match = 1;
-        }
+        card1.match = 1;
+        card2.match = 1;
+           
+    // Add audio for matching pair
         
-        // Add audio for matching pair
-        
-    } else if (card1 !== card2) { // if they are not a match, then clear playerStats.choices
+    } else {
         // if their match value is 0, flip the cards back
-            if (cardTypes[card1Index].match === 0) {
-                flipCard(document.getElementById(`${card1Index}`)); //why is this not flipping card back???
-              }
-            if (cardTypes[card2Index].match === 0) {
-                flipCard(document.getElementById(`${card2Index}`)); //why is this not flipping card back???
-              }
+        const card1El = document.getElementById(card1.id.toString()); // 
+        const card2El = document.getElementById(card2.id.toString());
+        console.log('time out will begin');
+        setTimeout(() => {
+            flipCard(card1El);
+            console.log('flipped first card')
+            flipCard(card2El);
+            render();
+        }, 500);
         
+
         console.log(`card one ${card1} does not pair with card two ${card2}`);
        
         // Add audio for no-match
@@ -149,7 +169,6 @@ function renderTimer() {
 }
 
 function renderScores() {
-    
     const scoreEl = document.getElementById('score');
     scoreEl.innerText = `Score: ${scores.playerOne}`;
 }

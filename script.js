@@ -81,10 +81,10 @@ if (evt.target.classList.contains('card') &&
   const cardId = parseInt(evt.target.id); // target the selected card's id property
   const cardChoice = cardTypes[cardId].img; //use that id to select cardTypes' image
 
-  if (cardTypes[cardId].match === 0) { // checks to see if card has been matched
-      evt.target.classList.toggle('card-visible'); // toggles the clicked card's class to 'card-visible'
+  if (cardTypes[cardId].match === 0) { // check to see if card has been matched already
+      flipCard(evt.target);
   }
-    
+    //Update player state variables
   if (playerStats.clicks === 0) {
     playerStats.choice1 = cardChoice;
     playerStats.clicks++;
@@ -97,6 +97,7 @@ if (evt.target.classList.contains('card') &&
     playerStats.clicks = 0; // Reset the clicks
     // playerStats.choice1 = null; // Reset player choices
     // playerStats.choice2 = null; // Reset player choices
+    
   } 
 
     console.log(playerStats);
@@ -104,29 +105,36 @@ if (evt.target.classList.contains('card') &&
     }
 }
 
-function flipCard() {
-
+function flipCard(card) {
+    card.classList.toggle('card-visible'); // toggles the clicked card's class to 'card-visible'
 }
 
+  
 function matchPairs (card1, card2) { // checks if selected cards are a match
-    if (card1 === card2) { // if they are, add 1 to scores
-        scores.playerOne++;
+    if (card1 === card2) { 
+        scores.playerOne++; // if they are, add 1 to scores
         console.log(`scores: ${scores.playerOne}`);
-        // card1 and card2 -> stay as card-visible class and unselectable
+        
        // Find the indices of card1 and card2 in the cardTypes array
         const card1Index = cardTypes.findIndex(card => card.img === card1);
         const card2Index = cardTypes.findIndex(card => card.img === card2 && card.id !== card1Index);
     console.log(card1Index, card2Index);
-    // Update the 'match' value to 1 for both cards
+    // Update the 'match' value to 1 for both cards so they become 'unselectable'
         if (card1Index !== -1 && card2Index !== -1) {
         cardTypes[card1Index].match = 1;
         cardTypes[card2Index].match = 1;
         }
+    // if their match value is 0, flip the cards back
+        if (cardTypes[card1Index].match === 0) {
+            flipCard(document.getElementById(`${card1Index}`)); //why is this not flipping card back???
+          }
+    
+    // Add audio for matching pair
        
-        // Add audio for matching pair
-       
-    } else { // if they are not, then clear playerStats.choices
+    } else { // if they are not a match, then clear playerStats.choices
+        
         console.log(`card one ${card1} does not pair with card two ${card2}`);
+       
         // Add audio for no-match
         
     }

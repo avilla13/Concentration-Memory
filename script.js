@@ -1,5 +1,5 @@
-
 /*----CONSTANTS----*/
+const noMatchAUDIO = new Audio('mixkit-cartoon-girl-saying-no-no-no-2257.wav');
 const cardDeck = [
     {img: 'blue', match: 0}, // NOTE: match property is actually STATE variable
     {img: 'blue', match: 0}, // match: 0 -> card not matched
@@ -154,7 +154,8 @@ function matchPairs (card1, card1El, card2, card2El) { // checks if selected car
             render();
         }, 500);
        
-        // Add audio for no-match 
+        // Add audio for no-match
+        noMatchAUDIO.play() ;
     }
 }
 

@@ -80,6 +80,10 @@ h1 {
   transition: background-color .5s;
   
 }
+.card:hover{
+  transform: rotateY('180');
+  border: 2px solid rgb(32, 218, 218);
+}
 
 .card-visible {
   width: 100%;
@@ -87,7 +91,9 @@ h1 {
   background-color: rgb(10, 97, 129);
   cursor: auto;
 }
+.card-visible:hover{
 
+}
 #right, #left {
   top:0;
   bottom: 0;

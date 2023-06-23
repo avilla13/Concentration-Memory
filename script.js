@@ -28,7 +28,7 @@ const timerDisplay = document.getElementById('timer');
 /*----EVENT listeners----*/
 
 // Add a click event listener to each gameboard element -> triggers the handleClick()
-gameboard.addEventListener('click', handleClick);
+// gameboard.addEventListener('click', handleClick);
 playAgainBtn.addEventListener('click', init);
 
 /*----FUNCTIONS----*/
@@ -40,11 +40,12 @@ function init() {
   playerStats.choice1 = null;
   playerStats.choice2 = null;
   playerStats.clicks = 0;
-  isFirstClick = true;
-  cardDeck.forEach((card) => card.match = 0);
-  cardEls.forEach(cardEl => cardEl.classList.remove('card-visible'));
-  count = 5;
+  isFirstClick = true; // reset timer
+  cardDeck.forEach((card) => card.match = 0); // clear matched cards
+  cardEls.forEach(cardEl => cardEl.classList.remove('card-visible')); // clear visible cards
+  count = 10;
   timerDisplay.style.visibility = 'hidden';
+  gameboard.addEventListener('click', handleClick);
   
 // results = {};
   render();
@@ -96,7 +97,7 @@ function handleClick(evt) {
         if (isFirstClick) {
         // Start timer function
         renderTimer();
-        // Set isFirstClick to false, so it won't execute this block on subsequent clicks
+        // Set isFirstClick to false, so it won't on subsequent clicks
         isFirstClick = false;
         }
   
@@ -117,8 +118,6 @@ function handleClick(evt) {
             playerStats.choice2, playerStats.choice2El);
 
         playerStats.clicks = 0; // Reset the clicks
-        // playerStats.choice1 = null; // Reset player choices
-        // playerStats.choice2 = null; // Reset player choices
         } 
         render(); // render the card(s) state
     }
@@ -127,6 +126,7 @@ function handleClick(evt) {
 function flipCard(card) {
     card.classList.toggle('card-visible'); // toggle target card's class to 'card-visible'
 } 
+
 function matchPairs (card1, card1El, card2, card2El) { // checks if selected cards are a match
        
     if (card1.img === card2.img) { 
@@ -158,13 +158,16 @@ function renderTimer() {
         if (count && isFirstClick === false) { // handle while it's ticking down
             timerDisplay.innerText = `Time: ${count}`;
         } else if(count && isFirstClick === true) {
-            // timerDisplay.style.visibility = 'hidden';
+            
             clearInterval(timer);
         } else {
-            timerDisplay.innerText = `Time: 00`;
+            timerDisplay.innerText = `Time's Up!`;
             clearInterval(timer);
+            gameboard.style.cursor = 'pointer';
             gameboard.removeEventListener('click', handleClick);
-
+            cardEls.forEach(cardEl => {
+                cardEl.style.cursor = 'auto';
+              });
         }
     }, 1000);
     console.log(`First card has been selected, the timer has begun!`);

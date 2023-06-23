@@ -58,6 +58,7 @@ function init() {
 function render() {
     renderBoard();
     renderScores();
+    renderResults();
 }
 // Using the Fisher-Yates shuffle algorithm method:
 function shuffle(array) { 
@@ -159,7 +160,7 @@ function renderTimer() {
         count--;
         if (count && isFirstClick === false && !winner) { // while it's ticking down & no winner
             timerDisplay.innerText = `Time: ${count}`;
-        } else if (count && isFirstClick === false && winner) { // while it's ticking and player wins
+        } else if (count && isFirstClick === false && winner) { // while ticking down & player wins
             timerDisplay.innerText = `Time: ${count}`;    
         } else if(count && isFirstClick === true) { // reset timer when 'play again' is clicked
             clearInterval(timer);
@@ -190,7 +191,9 @@ function getWinner(timeNum) {
         return;
     }
 }
-
+function renderResults() { 
+    return renderMsg(winner);
+}
 function renderMsg(boolean) {
     if (boolean){
         resultsEl.style.visibility = 'visible';

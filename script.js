@@ -1,9 +1,9 @@
 
 /*----CONSTANTS----*/
 const cardDeck = [
+    {img: 'blue', match: 0}, // NOTE: match property is actually STATE variable
     {img: 'blue', match: 0}, // match: 0 -> card not matched
-    {img: 'blue', match: 0}, // match: 1 -> card has been matched
-    {img: 'red', match: 0},
+    {img: 'red', match: 0}, // match: 1 -> card has been matched
     {img: 'red', match: 0},
     {img: 'yellow', match: 0},
     {img: 'yellow', match: 0},
@@ -58,7 +58,6 @@ function init() {
 function render() {
     renderBoard();
     renderScores();
-    renderResults();
 }
 // Using the Fisher-Yates shuffle algorithm method:
 function shuffle(array) { 
@@ -77,8 +76,7 @@ function shuffle(array) {
     return array;
   }
 
-// render board-> initiate shuffled board grid (only once), 
-// then render state of cards whenever invoked
+// render state of cards whenever invoked
 function renderBoard() {
     // Assign the 'images' from the cardTypes to each card element w/ 'card-visible' class
     cardEls.forEach((cardEl, index) => {
@@ -161,7 +159,7 @@ function renderTimer() {
         count--;
         if (count && isFirstClick === false && !winner) { // while it's ticking down & no winner
             timerDisplay.innerText = `Time: ${count}`;
-        } else if (count && isFirstClick === false && winner) { // while it's ticking down and winner
+        } else if (count && isFirstClick === false && winner) { // while it's ticking and player wins
             timerDisplay.innerText = `Time: ${count}`;    
         } else if(count && isFirstClick === true) { // reset timer when 'play again' is clicked
             clearInterval(timer);
@@ -192,9 +190,7 @@ function getWinner(timeNum) {
         return;
     }
 }
-function renderResults() { 
-    return renderMsg(winner);
-}
+
 function renderMsg(boolean) {
     if (boolean){
         resultsEl.style.visibility = 'visible';

@@ -175,12 +175,11 @@ function renderTimer() {
             renderMsg(winner);
         }
     }, 1000);
-    console.log(`First card has been selected, the timer has begun!`);
 }
 
 function renderScores() {
     const scoreEl = document.getElementById('score');
-    scoreEl.innerText = `Score: ${scores.playerOne}`;
+    scoreEl.innerText = `Matched Pairs: ${scores.playerOne}/${(cardDeck.length)/2}`;
 }
 function getWinner(timeNum) {
     if(scores.playerOne === (cardDeck.length)/2) {

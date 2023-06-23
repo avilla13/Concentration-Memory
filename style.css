@@ -11,9 +11,10 @@ body {
 }
 header {
   background-color: #333;
-  color: lightgreen;
-  padding: 10px 0;
-  font-family: 'Nanum Gothic Coding', monospace;
+  color: rgb(4, 251, 4);
+  padding: 10px 0 1px;
+  font-family: 'Play', sans-serif;
+  letter-spacing: 3px;
 }
 h1 {
   margin-top: 10px;
@@ -37,6 +38,7 @@ h1 {
 #score {
   margin-top: 10px;
   color: aquamarine;
+  font-family: 'Nanum Gothic Coding', monospace;
 }
 
 #results {

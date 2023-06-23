@@ -17,6 +17,7 @@ let playerStats = { // Variable to track player choices and stats
     clicks: 0
 };
 let count; // Holds reference to renderTimer()
+let winner; // Hold reference to getWinner()
 
 /*----CACHED elements----*/
 
@@ -24,6 +25,7 @@ const cardEls = document.querySelectorAll('.card'); // Get all the elements with
 const gameboard = document.getElementById('gameboard'); // Get all the elements in gameboard
 const playAgainBtn = document.querySelector('button');
 const timerDisplay = document.getElementById('timer');
+const resultsEl = document.getElementById('results'); // Get results element
 
 /*----EVENT listeners----*/
 
@@ -40,14 +42,15 @@ function init() {
   playerStats.choice1 = null;
   playerStats.choice2 = null;
   playerStats.clicks = 0;
+  winner = null; // reset winner
   isFirstClick = true; // reset timer
   cardDeck.forEach((card) => card.match = 0); // clear matched cards
   cardEls.forEach(cardEl => cardEl.classList.remove('card-visible')); // clear visible cards
   count = 10;
   timerDisplay.style.visibility = 'hidden';
   gameboard.addEventListener('click', handleClick);
-  
-// results = {};
+  resultsEl.style.visibility = 'hidden';
+
   render();
 }
 
@@ -154,20 +157,23 @@ function renderTimer() {
     timerDisplay.innerText = `Time: ${count}`;
     timerDisplay.style.visibility = 'visible';
     const timer = setInterval(() => {
+        getWinner(timer);
         count--;
-        if (count && isFirstClick === false) { // handle while it's ticking down
+        if (count && isFirstClick === false && !winner) { // while it's ticking down & no winner
             timerDisplay.innerText = `Time: ${count}`;
-        } else if(count && isFirstClick === true) {
-            
+        } else if (count && isFirstClick === false && winner) { // while it's ticking down and winner
+            timerDisplay.innerText = `Time: ${count}`;    
+        } else if(count && isFirstClick === true) { // reset timer when 'play again' is clicked
             clearInterval(timer);
         } else {
             timerDisplay.innerText = `Time's Up!`;
             clearInterval(timer);
-            gameboard.style.cursor = 'pointer';
+            gameboard.style.cursor = 'auto';
             gameboard.removeEventListener('click', handleClick);
             cardEls.forEach(cardEl => {
                 cardEl.style.cursor = 'auto';
               });
+            renderMsg(winner);
         }
     }, 1000);
     console.log(`First card has been selected, the timer has begun!`);
@@ -177,11 +183,26 @@ function renderScores() {
     const scoreEl = document.getElementById('score');
     scoreEl.innerText = `Score: ${scores.playerOne}`;
 }
-function renderResults() {
-    // const matchedCards = cardEls.filter(cardEl => cardEl.classList ==='card-visible');
-    // console.log(matchedCards);
-    return renderMsg();
+function getWinner(timeNum) {
+    if(scores.playerOne === (cardDeck.length)/2) {
+        winner = true;
+        clearInterval(timeNum);
+        renderMsg(winner)
+    } else {
+        return;
+    }
 }
-function renderMsg() {
-
+function renderResults() { 
+    return renderMsg(winner);
+}
+function renderMsg(boolean) {
+    if (boolean){
+        resultsEl.style.visibility = 'visible';
+        resultsEl.innerText = 'YOU WIN!';
+    } else if(count){
+        return;
+    } else {
+        resultsEl.style.visibility = 'visible';
+        resultsEl.innerText = 'YOU LOSE!';
+    }
 }

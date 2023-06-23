@@ -39,6 +39,16 @@ h1 {
   color: aquamarine;
 }
 
+#results {
+  visibility: hidden;
+  text-align: center;
+  color: rgb(0, 242, 255);
+  margin: 20px auto;
+  font-family: 'Fira Mono', monospace;
+  letter-spacing: 3px;
+  font-size: 20px;
+}
+
 #gameboard {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -112,6 +122,9 @@ button {
   background-color: #333;
   color: #fff;
   border: none;
-  border-radius: 50%;
+  border-radius: 60%;
   cursor: pointer;
+}
+button:hover {
+  border: 3px solid goldenrod;
 }

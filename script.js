@@ -7,6 +7,12 @@ const cardDeck = [
     {img: 'red', match: 0},
     {img: 'yellow', match: 0},
     {img: 'yellow', match: 0},
+    {img: 'plum', match: 0},
+    {img: 'plum', match: 0},
+    {img: 'orange', match: 0},
+    {img: 'orange', match: 0},
+    {img: 'cyan', match: 0},
+    {img: 'cyan', match: 0},
 ];
 
 /*----game STATE variables----*/
@@ -46,7 +52,7 @@ function init() {
   isFirstClick = true; // reset timer
   cardDeck.forEach((card) => card.match = 0); // clear matched cards
   cardEls.forEach(cardEl => cardEl.classList.remove('card-visible')); // clear visible cards
-  count = 10;
+  count = 20;
   timerDisplay.style.visibility = 'hidden';
   gameboard.addEventListener('click', handleClick);
   resultsEl.style.visibility = 'hidden';
@@ -79,7 +85,7 @@ function shuffle(array) {
 
 // render state of cards whenever invoked
 function renderBoard() {
-    // Assign the 'images' from the cardTypes to each card element w/ 'card-visible' class
+    // Assign the 'colors' from the cardTypes to each card element w/ 'card-visible' class
     cardEls.forEach((cardEl, index) => {
         if(cardEl.classList.contains('card-visible')) {
             cardEl.style.backgroundColor = cardDeck[index].img;

@@ -15,15 +15,15 @@ let playerStats = { // Variable to track player choices and stats
     choice1: null,
     choice2: null,
     clicks: 0
-}; 
-let cardChoices = []; // Empty array to hold player choices
-let timer;
+};
+let count; // Holds reference to renderTimer()
 
 /*----CACHED elements----*/
 
 const cardEls = document.querySelectorAll('.card'); // Get all the elements with the class 'card'
 const gameboard = document.getElementById('gameboard'); // Get all the elements in gameboard
 const playAgainBtn = document.querySelector('button');
+const timerDisplay = document.getElementById('timer');
 
 /*----EVENT listeners----*/
 
@@ -33,7 +33,6 @@ playAgainBtn.addEventListener('click', init);
 
 /*----FUNCTIONS----*/
 
-// DON'T FORGET TO CALL init() to initialize all state, then call render()
 init();
 function init() {
   shuffle (cardDeck);
@@ -44,6 +43,9 @@ function init() {
   isFirstClick = true;
   cardDeck.forEach((card) => card.match = 0);
   cardEls.forEach(cardEl => cardEl.classList.remove('card-visible'));
+  count = 5;
+  timerDisplay.style.visibility = 'hidden';
+  
 // results = {};
   render();
 }
@@ -63,13 +65,10 @@ function shuffle(array) {
       // Pick a remaining element.
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
-  
       // And swap it with the current element.
       const tempVal = array[currentIndex];
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = tempVal;
-    //   [array[currentIndex], array[randomIndex]] = [
-    //     array[randomIndex], array[currentIndex]];
     }
     return array;
   }
@@ -88,57 +87,50 @@ function renderBoard() {
 }
 
 function handleClick(evt) {
-  // Need to assign clicked card to variable (object)
+    // Need to assign clicked card to variable (object)
     const cardObj = cardDeck[parseInt(evt.target.id)];
-
     // guards for only clicking on card elements
     if (evt.target.classList.contains('card') && 
     cardObj.match === 0) { //  & to not select matched cards
-    // Check if it's the first click
+        // Check if it's the first click
         if (isFirstClick) {
-    // Start timer function
+        // Start timer function
         renderTimer();
-    // Set isFirstClick to false, so it won't execute this block on subsequent clicks
+        // Set isFirstClick to false, so it won't execute this block on subsequent clicks
         isFirstClick = false;
         }
-  console.log(cardObj, typeof(cardObj));
-  // Store first card and second card in the 'playerStats.choice1 & 2' (respectively) and track clicks
+  
+        flipCard(evt.target);
+        
+        // Store first card and second card in the 'playerStats.choice1 & 2' 
+        //Update player state variables
+        if (playerStats.clicks === 0) {
+         playerStats.choice1 = cardObj; // add clicked card obj to choice1
+            playerStats.choice1El = evt.target; // add the HTML element
+         playerStats.clicks++;
+        } else if (playerStats.clicks === 1) {
+            playerStats.choice2 = cardObj;
+            playerStats.choice2El = evt.target;
+            
+        //check for pairs
+        matchPairs(playerStats.choice1, playerStats.choice1El, 
+            playerStats.choice2, playerStats.choice2El);
 
-  flipCard(evt.target);
-
-    //Update player state variables
-  if (playerStats.clicks === 0) {
-    playerStats.choice1 = cardObj; // add clicked card obj to choice1
-    playerStats.choice1El = evt.target; // add the HTML element
-    playerStats.clicks++;
-  } else if (playerStats.clicks === 1) {
-    playerStats.choice2 = cardObj;
-    playerStats.choice2El = evt.target;
-    console.log(playerStats);
-    
-    //check for pairs
-    matchPairs(playerStats.choice1, playerStats.choice1El, playerStats.choice2, playerStats.choice2El);
-
-    playerStats.clicks = 0; // Reset the clicks
-    // playerStats.choice1 = null; // Reset player choices
-    // playerStats.choice2 = null; // Reset player choices
-    
-  } 
-
-    render(); // render the card(s) state
-}
+        playerStats.clicks = 0; // Reset the clicks
+        // playerStats.choice1 = null; // Reset player choices
+        // playerStats.choice2 = null; // Reset player choices
+        } 
+        render(); // render the card(s) state
+    }
 } // end click handler
 
 function flipCard(card) {
-    card.classList.toggle('card-visible'); // toggles the clicked card's class to 'card-visible'
-}
-
-  
+    card.classList.toggle('card-visible'); // toggle target card's class to 'card-visible'
+} 
 function matchPairs (card1, card1El, card2, card2El) { // checks if selected cards are a match
        
     if (card1.img === card2.img) { 
-        scores.playerOne++; // if they are, add 1 to scores
-        console.log(`scores: ${scores.playerOne}`);  
+        scores.playerOne++; // if they are, add 1 to scores 
         
     // Update the 'match' value to 1 for both cards so they become 'unselectable'
         card1.match = 1;
@@ -148,25 +140,34 @@ function matchPairs (card1, card1El, card2, card2El) { // checks if selected car
         
     } else {
         // if their match value is 0, flip the cards back
-        
-        console.log('time out will begin');
         setTimeout(() => {
             flipCard(card1El);
-            console.log('flipped first card')
             flipCard(card2El);
             render();
         }, 500);
-        
-
-        console.log(`card one ${card1} does not pair with card two ${card2}`);
        
-        // Add audio for no-match
-        
+        // Add audio for no-match 
     }
 }
 
 function renderTimer() {
-  return console.log(`First card has been selected, the timer has begun!`);
+    timerDisplay.innerText = `Time: ${count}`;
+    timerDisplay.style.visibility = 'visible';
+    const timer = setInterval(() => {
+        count--;
+        if (count && isFirstClick === false) { // handle while it's ticking down
+            timerDisplay.innerText = `Time: ${count}`;
+        } else if(count && isFirstClick === true) {
+            // timerDisplay.style.visibility = 'hidden';
+            clearInterval(timer);
+        } else {
+            timerDisplay.innerText = `Time: 00`;
+            clearInterval(timer);
+            gameboard.removeEventListener('click', handleClick);
+
+        }
+    }, 1000);
+    console.log(`First card has been selected, the timer has begun!`);
 }
 
 function renderScores() {
@@ -174,5 +175,10 @@ function renderScores() {
     scoreEl.innerText = `Score: ${scores.playerOne}`;
 }
 function renderResults() {
+    // const matchedCards = cardEls.filter(cardEl => cardEl.classList ==='card-visible');
+    // console.log(matchedCards);
+    return renderMsg();
+}
+function renderMsg() {
 
 }

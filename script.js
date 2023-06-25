@@ -108,9 +108,7 @@ function handleClick(evt) {
         // Set isFirstClick to false, so it won't on subsequent clicks
         isFirstClick = false;
         }
-  
         flipCard(evt.target);
-        
         // Store first card and second card in the 'playerStats.choice1 & 2' 
         //Update player state variables
         if (playerStats.clicks === 0) {
@@ -119,13 +117,12 @@ function handleClick(evt) {
          playerStats.clicks++;
         } else if (playerStats.clicks === 1) {
             playerStats.choice2 = cardObj;
-            playerStats.choice2El = evt.target;
-            
-        //check for pairs
-        matchPairs(playerStats.choice1, playerStats.choice1El, 
+            playerStats.choice2El = evt.target;   
+            //check for pairs
+            matchPairs(playerStats.choice1, playerStats.choice1El, 
             playerStats.choice2, playerStats.choice2El);
 
-        playerStats.clicks = 0; // Reset the clicks
+            playerStats.clicks = 0; // Reset the clicks
         } 
         render(); // render the card(s) state
     }
@@ -135,27 +132,22 @@ function flipCard(card) {
     card.classList.toggle('card-visible'); // toggle target card's class to 'card-visible'
 } 
 
-function matchPairs (card1, card1El, card2, card2El) { // checks if selected cards are a match
-       
+function matchPairs (card1, card1El, card2, card2El) { // checks if selected cards are a match   
     if (card1.img === card2.img) { 
         scores.playerOne++; // if they are, add 1 to scores 
-        
     // Update the 'match' value to 1 for both cards so they become 'unselectable'
         card1.match = 1;
-        card2.match = 1;
-           
-    // Add audio for matching pair
-        
+        card2.match = 1;        
+    // Add audio for matching pair    
     } else {
         // if their match value is 0, flip the cards back
         setTimeout(() => {
             flipCard(card1El);
             flipCard(card2El);
             render();
-        }, 500);
-       
+        }, 500); 
         // Add audio for no-match
-        noMatchAUDIO.play() ;
+        // noMatchAUDIO.play();
     }
 }
 
@@ -200,8 +192,8 @@ function getWinner(timeNum) {
 function renderResults() { 
     return renderMsg(winner);
 }
-function renderMsg(boolean) {
-    if (boolean){
+function renderMsg(booleanVal) {
+    if (booleanVal){
         resultsEl.style.visibility = 'visible';
         resultsEl.innerText = 'YOU WIN!';
     } else if(count){

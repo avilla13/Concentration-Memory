@@ -1,61 +1,33 @@
-# Concentration/Memory Game
-​
-![Project Proposal Image](./screenshot1.png)
-​
+# Memory Dash
+Memory Dash is a fast-paced memory matching game. Test your memory skills and race against the clock in this exciting challenge!
 
-## Constants: 
-- cardTypes (pictures/icon pairs in array)
-- timerLimit
-  
+![game snippet](midgame-state.png)
 
-## State variables: 
-- gameBoard 
-	- grid/layout of the cards (2D array)
-	- whether cards are face up or face down
-	- matched or unmatched
-- cardState
-	- visibility: face up or face down
-	- status: matched or unmatched
-- score
-	- stores number of pairs
-	- can be single variable for single player 
-	- can be an array for multiple players
-- gameState
-	- initialState
-		- when game begins or is reset
-	- endState
-		- when all cards are visible
-- playerTurn
-	- switches with cardState and gameState
-  
-## Cached Elements: 
-- cardPairs
-	- matched or visible cards (pairs)
-- messageEl
-	- outputs after every player turn or game state
-- playAgainButton
+## Game Objective
+The objective of Memory Dash is to match all the pairs of cards within the given time limit. Players need to flip cards and remember their positions to make successful matches. The game ends when all pairs are matched or when the timer runs out.
 
-  
-## Event Listeners:
-- On player selection (on click) flip card
-	- document.getElemenById('card').addEventListener('click', handleCardFlip);
-- playAgainButton
-	- playAgainButton.addEventListener('click', init)
-  
+## Getting Started
+### Live Link:
+Click on the following link to open the live version of the game:
+[Memory-Dash](https://avilla13.github.io/Concentration-Memory/)
 
-## Functions:
-- Initialize all state 
-	- function init()
-- render
-	- update all DOM state
-- randomizeBoard
-	- function algorithm that re-orders the grid position of cards
-- checkForPairs
-	- checks if current player selections are a pair or not
-	- if pair is true = add to score, otherwise hide cards (face down)
-- Timer
-	- Have a count down from set timer limit
-	- begin count down on first click
-	- stop count down when all board elements are visible
-- getWinner
-	- tallies up the score when game ends
+### How to Play
+1. Launch the game by opening this [link](https://avilla13.github.io/Concentration-Memory/) in browser (or live link above).
+2. The game board will display a grid of cards (face-down). 
+   ![initial-game](initial-state.png)
+3. Click on two cards to reveal their faces. The timer will begin when first card is flipped.
+4. If the cards match, they will remain face-up and you will earn point.
+5. If the cards do not match, they will be flipped back face-down.
+6. Continue flipping cards and making matches until all pairs are found.
+   ![mid-game snippet](midgame-state.png)
+7. If you match all pairs before the time runs out, you win the game.
+   ![you-win snippet](win-state.png)
+8. If the time runs out before all pairs are matched, you lose the game.
+   ![you-lose snippet](lose-state.png)
+
+## Technologies
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+
+## Future Features
+- Add difficulty levels that take card types, allotted time and number of cards as the driving parameters
+- Keep track of clicks to provide user feedback message based on the number of clicks, matched pairs and remaining time (if any)

@@ -110,7 +110,6 @@ function handleClick(evt) {
             // Check for pairs
             matchPairs(playerStats.choice1, playerStats.choice1El, 
             playerStats.choice2, playerStats.choice2El);
-
             playerStats.clicks = 0; // Reset the clicks to repeat on subsequent click
         } 
         render(); // Render the card(s) state

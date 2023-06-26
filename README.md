@@ -14,15 +14,22 @@ Click on the following link to open the live version of the game:
 ### How to Play
 1. Launch the game by opening this [link](https://avilla13.github.io/Concentration-Memory/) in browser (or live link above).
 2. The game board will display a grid of cards (face-down). 
+
    ![initial-game](screenshots/initial-state.png)
+   
 3. Click on two cards to reveal their faces. The timer will begin when first card is flipped.
 4. If the cards match, they will remain face-up and you will earn point.
 5. If the cards do not match, they will be flipped back face-down.
 6. Continue flipping cards and making matches until all pairs are found.
+
    ![mid-game snippet](screenshots/midgame-state.png)
+   
 7. If you match all pairs before the time runs out, you win the game.
+
    ![you-win snippet](screenshots/win-state.png)
+   
 8. If the time runs out before all pairs are matched, you lose the game.
+
    ![you-lose snippet](screenshots/lose-state.png)
 
 ## Technologies
